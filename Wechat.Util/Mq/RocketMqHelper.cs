@@ -38,7 +38,7 @@ namespace Wechat.Util.Mq
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public static DefaultMQProducer CreateDefaultMQProducer(string groupName)
+        public static DefaultMQProducer CreateDefaultMQProducer(string groupName, int queueCount = 6)
         {
             var producer = producers.Where(o => o.getProducerGroup() == groupName).FirstOrDefault();
             if (producer == null) //双if +lock
@@ -50,6 +50,8 @@ namespace Wechat.Util.Mq
                     {
                         producer = new DefaultMQProducer(groupName);
                         producer.setNamesrvAddr(namesrvAddr);
+                        producer.setRetryTimesWhenSendFailed(3);
+                        producer.setDefaultTopicQueueNums(queueCount);
                         producer.start();
                         producers.Add(producer);
 
@@ -61,23 +63,12 @@ namespace Wechat.Util.Mq
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// 创建消费者
         /// </summary>
         /// <param name="group"></param> 
         /// <returns></returns>
-        public static DefaultMQPushConsumer CreateDefaultMQPushConsumer<T>(string groupName) where T : MessageListenerConcurrently
+        public static DefaultMQPushConsumer CreateDefaultMQPushConsumer<T>(string groupName ) where T : MessageListenerConcurrently
         {
             var consumer = consumers.Where(o => o.getConsumerGroup() == groupName).FirstOrDefault();
             if (consumer == null) //双if +lock
@@ -87,7 +78,7 @@ namespace Wechat.Util.Mq
                     consumer = consumers.Where(o => o.getConsumerGroup() == groupName).FirstOrDefault();
                     if (consumer == null)
                     {
-                        consumer = new DefaultMQPushConsumer(groupName);
+                        consumer = new DefaultMQPushConsumer(groupName);                    
                         consumer.setNamesrvAddr(namesrvAddr);
                         consumer.setMessageModel(MessageModel.CLUSTERING);
                         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
@@ -101,7 +92,7 @@ namespace Wechat.Util.Mq
         }
 
 
- 
+
 
 
     }

@@ -38,8 +38,8 @@ namespace Wechat.Api
             //QueueHelper<UploadFileObj>.Register(UploadFileAction.UploadFile);
             //QueueHelper<UploadFileObj>.Start();
 
-            QuartzHelper.CreateScheduler().GetAwaiter().GetResult();
-            QuartzHelper.RegisterJob<SyncMessageJob>("/5 * * ? * *", "wechat").GetAwaiter().GetResult();
+            //QuartzHelper.CreateScheduler().GetAwaiter().GetResult();
+            //QuartzHelper.RegisterJob<SyncMessageJob>("/5 * * ? * *", "wechat").GetAwaiter().GetResult();
 
         }
     }

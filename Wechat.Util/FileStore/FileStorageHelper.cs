@@ -144,7 +144,7 @@ namespace Wechat.Util.FileStore
             return buffer;
         }
 
-       
+
 
         /// <summary>
         /// 上传
@@ -162,9 +162,12 @@ namespace Wechat.Util.FileStore
             }
             catch (Exception ex)
             {
-                Wechat.Util.Log.Logger.GetLog<FileStorageHelper>().Error(ex);    
+                Wechat.Util.Log.Logger.GetLog<FileStorageHelper>().Error(ex);
             }
 
         }
+
+
+   
     }
 }

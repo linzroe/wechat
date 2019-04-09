@@ -36,7 +36,7 @@ namespace Wechat.Util.TaskServer
 
             ITrigger trigger = TriggerBuilder.Create()
              .WithIdentity(typeof(TJob).Name, group)
-             .StartNow()
+             .StartAt(DateTimeOffset.Now.AddSeconds(30))
              .WithCronSchedule(cronExpression).Build();
 
             //把作业，触发器加入调度器。

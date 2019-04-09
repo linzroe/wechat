@@ -217,7 +217,7 @@
         </member>
         <member name="M:Wechat.Api.Controllers.FriendController.AddFriendRequest(Wechat.Api.Request.Friend.AddFriend)">
             <summary>
-            添加好友
+            发送好友请求
             </summary>
             <param name="addFriend"></param> 
             <returns></returns>

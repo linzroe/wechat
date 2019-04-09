@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Topshelf;
 using Wechat.Task.App.MessageListener;
+using Wechat.Task.App.ServiceRunner;
 
 namespace Wechat.Task.App
 {
@@ -18,7 +19,7 @@ namespace Wechat.Task.App
                 x.RunAsLocalSystem();
                 x.SetDescription("执行消息队列服务，消费同步消息上传oss文件的服务");
                 x.SetDisplayName("执行消息队列服务，消费同步消息上传oss文件的服务");
-                x.SetServiceName("uploadOssService");
+                x.SetServiceName("UploadOssService");
                 Util.Log.Logger.GetLog<Program>().Info("服务启动成功");
                 x.Service<MessageTopshelf>(s =>
                 {

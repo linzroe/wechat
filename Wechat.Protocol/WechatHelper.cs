@@ -250,8 +250,11 @@ namespace Wechat.Protocol
                     if (r.state == 2)
                     {
                         //发送登录包
-                        checkManualAuth(customerInfoCache, count);                 
+                        checkManualAuth(customerInfoCache, count);
                         cache.HashSet(ConstCacheKey.GetWxIdKey(), customerInfoCache.WxId, customerInfoCache);
+
+                        var producer = RocketMqHelper.CreateDefaultMQProducer(MqConst.UserSyncMessageCusomerGroup);
+                        producer.SendMessage(new Message(MqConst.UserSyncMessageTopic, Encoding.UTF8.GetBytes(customerInfoCache.WxId)));
 
                     }
                 }
@@ -623,7 +626,10 @@ namespace Wechat.Protocol
                                     Message message = new Message(MqConst.UploadOssTopic, buffer);
                                     producer.SendMessage(message);
                                 }
-                                catch { }
+                                catch (Exception ex)
+                                {
+                                    Wechat.Util.Log.Logger.GetLog<WechatHelper>().Error("同步微信消息错误", ex);
+                                }
                             }
 
                             list.AddMsgs.Add(addMsg);
@@ -3870,6 +3876,65 @@ namespace Wechat.Protocol
             return SendAppMsgResponse_;
 
         }
+        public NewGetInviteFriendResponse GetNewGetInviteFriend(string wxId, int friendType = 0)
+        {
+
+            var cache = RedisCache.CreateInstance();
+            var customerInfoCache = cache.HashGet<CustomerInfoCache>(ConstCacheKey.GetWxIdKey(), wxId);
+            if (customerInfoCache == null)
+            {
+                throw new ExpiredException("缓存失效，请重新生成二维码登录");
+            }
+            byte[] RespProtobuf = new byte[0];
+
+
+            NewGetInviteFriendRequest newGetInviteFriendRequest = new NewGetInviteFriendRequest()
+            {
+                baseRequest = new BaseRequest()
+                {
+                    sessionKey = customerInfoCache.BaseRequest.sessionKey,
+                    uin = customerInfoCache.BaseRequest.uin,
+                    devicelId = customerInfoCache.BaseRequest.devicelId,
+                    clientVersion = customerInfoCache.BaseRequest.clientVersion,
+                    osType = customerInfoCache.BaseRequest.osType,
+                    scene = customerInfoCache.BaseRequest.scene
+                },
+                friendType = (uint)friendType,
+            };
+
+            var src = Util.Serialize(newGetInviteFriendRequest);
+
+
+            int mUid = 0;
+            string cookie = null;
+            int bufferlen = src.Length;
+            //组包
+            byte[] SendDate = pack(src, (int)CGI_TYPE.CGI_TYPE_NEWGETINVITEFRIEND, bufferlen, customerInfoCache.AesKey, customerInfoCache.PriKeyBuf, customerInfoCache.MUid, customerInfoCache.Cookie, 5, true, true);
+            //发包
+            byte[] RetDate = Util.HttpPost(SendDate, URL.CGI_NEWGETINVITEFRIEND, customerInfoCache.Proxy);
+            if (RetDate.Length > 32)
+            {
+                var packinfo = UnPackHeader(RetDate, out mUid, out cookie);
+                //Console.WriteLine("CGI {0} BodyLength {1} m_bCompressed {2}", packinfo.CGI, packinfo.body.Length, packinfo.m_bCompressed);
+                RespProtobuf = packinfo.body;
+                if (packinfo.m_bCompressed)
+                {
+                    RespProtobuf = Util.uncompress_aes(packinfo.body, customerInfoCache.AesKey);
+                }
+                else
+                {
+                    RespProtobuf = Util.nouncompress_aes(packinfo.body, customerInfoCache.AesKey);
+                }
+
+            }
+            else
+            {
+                throw new ExpiredException("用户可能退出,请重新登陆");
+            }
+
+            var newGetInviteFriendResponse = Util.Deserialize<NewGetInviteFriendResponse>(RespProtobuf);
+            return newGetInviteFriendResponse;
+        }
 
 
         /// <summary>
@@ -4763,7 +4828,11 @@ namespace Wechat.Protocol
             {
                 throw new ExpiredException("用户可能退出,请重新登陆");
             }
-
+            if (RespProtobuf == null)
+            {
+                Wechat.Util.Log.Logger.GetLog<WechatHelper>().Warn($"{customerInfoCache.WxId}同步微信消息返回为空");
+                return new NewSyncResponse();
+            }
             var NewSync = Util.Deserialize<NewSyncResponse>(RespProtobuf);
 
             return NewSync;

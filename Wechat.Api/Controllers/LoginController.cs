@@ -81,11 +81,7 @@ namespace Wechat.Api.Controllers
             ResponseBase<CheckLoginResponse> response = new ResponseBase<CheckLoginResponse>();
             try
             {
-                var result = _wechat.CheckLoginQRCode(uuid);
-                if (result.State == 2)
-                {
-                    SyncMessageJob.LogoutWxIds.Remove(result.WxId);
-                }
+                var result = _wechat.CheckLoginQRCode(uuid);            
                 CheckLoginResponse checkLoginResponse = new CheckLoginResponse();
                 checkLoginResponse.State = result.State;
                 checkLoginResponse.Uuid = result.Uuid;

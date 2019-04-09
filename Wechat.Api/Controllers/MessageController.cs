@@ -145,7 +145,7 @@ namespace Wechat.Api.Controllers
             {
                 IList<MMPro.MM.UploadVideoResponse> list = new List<MMPro.MM.UploadVideoResponse>();
                 byte[] buffer = await FileStorageHelper.DownloadToBufferAsync(videoMessage.ObjectName);
-
+              
                 byte[] imageBuffer = await FileStorageHelper.DownloadToBufferAsync(videoMessage.ImageObjectName);
                 foreach (var item in videoMessage.ToWxIds)
                 {

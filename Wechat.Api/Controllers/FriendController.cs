@@ -192,7 +192,7 @@ namespace Wechat.Api.Controllers
             return response.ToHttpResponseAsync();
         }
         /// <summary>
-        /// 添加好友
+        /// 发送好友请求
         /// </summary>
         /// <param name="addFriend"></param> 
         /// <returns></returns>
@@ -292,6 +292,9 @@ namespace Wechat.Api.Controllers
         }
 
 
+ 
+
+
         /// <summary>
         /// 通过好友验证
         /// </summary>
@@ -332,6 +335,10 @@ namespace Wechat.Api.Controllers
             }
             return response.ToHttpResponseAsync();
         }
+
+
+
+
 
         /// <summary>
         /// 拒绝好友验证

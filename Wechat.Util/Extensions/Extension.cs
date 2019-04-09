@@ -15,7 +15,7 @@ using ZXing.QrCode;
 namespace Wechat.Util.Extensions
 {
     public static class Extension
-    {       
+    {
         public static string ToJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj);
@@ -118,14 +118,10 @@ namespace Wechat.Util.Extensions
         public static SendResult SendMessage(this DefaultMQProducer defaultMQProducer, Message message)
         {
             var sendResult = defaultMQProducer.send(message);
-            int count = 0;
+
             if (sendResult.getSendStatus() != SendStatus.SEND_OK)
             {
-                if (count > 5)
-                {
-                    Wechat.Util.Log.Logger.GetLog<DefaultMQProducer>().Error($"推送作业消息失败，推送内容【{Encoding.UTF8.GetString(message.getBody())}】");
-                }
-                sendResult = defaultMQProducer.send(message);
+                Wechat.Util.Log.Logger.GetLog<DefaultMQProducer>().Error($"推送作业消息失败，推送内容【{Encoding.UTF8.GetString(message.getBody())}】");
             }
             return sendResult;
         }

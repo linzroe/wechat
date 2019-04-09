@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wechat.Api.Test", "Wechat.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wechat.Task.App", "Wechat.Task.App\Wechat.Task.App.csproj", "{ECE017B8-6952-48D7-BD60-6925644FCB75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wechat.Task.SyncMessage.App", "Wechat.Task.SyncMessage.App\Wechat.Task.SyncMessage.App.csproj", "{1AF317DD-7E95-49C6-94A4-6141E7F7920A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{ECE017B8-6952-48D7-BD60-6925644FCB75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE017B8-6952-48D7-BD60-6925644FCB75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECE017B8-6952-48D7-BD60-6925644FCB75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF317DD-7E95-49C6-94A4-6141E7F7920A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF317DD-7E95-49C6-94A4-6141E7F7920A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF317DD-7E95-49C6-94A4-6141E7F7920A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF317DD-7E95-49C6-94A4-6141E7F7920A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

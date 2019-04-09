@@ -27,13 +27,13 @@
         "Location":"湖北省仙桃市",
         "Operator":"电信"
     },
-    {
-        "ProxyIp":"117.191.11.110:80",
-        "Username":"",
-        "Password":"",
-        "Location":"新疆",
-        "Operator":"移动"
-    },
+    //{
+    //    "ProxyIp":"117.191.11.110:80",
+    //    "Username":"",
+    //    "Password":"",
+    //    "Location":"新疆",
+    //    "Operator":"移动"
+    //},
     {
         "ProxyIp":"223.111.254.83:80",
         "Username":"",

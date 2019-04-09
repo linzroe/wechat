@@ -26,7 +26,7 @@ namespace Wechat.Api.Helper
 
         static object lockObj = new object();
 
-        public static IList<string> LogoutWxIds = new List<string>();
+        private static IList<string> LogoutWxIds = new List<string>();
 
         public Task Execute(IJobExecutionContext context)
         {

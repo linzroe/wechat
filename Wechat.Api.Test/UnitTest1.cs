@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using org.apache.rocketmq.client.consumer.listener;
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -16,13 +17,19 @@ namespace Wechat.Api.Test
     {
         public ConsumeConcurrentlyStatus consumeMessage(List list, ConsumeConcurrentlyContext ccc)
         {
+
             Iterator iterator = list.iterator();
             while (iterator.hasNext())
             {
                 try
                 {
                     var messageClientExt = iterator.next() as org.apache.rocketmq.common.message.MessageClientExt;
-                    var ss = Encoding.UTF8.GetString(messageClientExt.getBody());
+                    var producer1 = RocketMqHelper.CreateDefaultMQProducer("aaaaa");
+                    var message = new org.apache.rocketmq.common.message.Message("testtopic123455ssss", Encoding.UTF8.GetBytes("张三dddd"));
+                    message.setDelayTimeLevel(2);
+
+                    producer1.send(message);
+
                 }
                 catch (Exception ex)
                 {
@@ -39,22 +46,24 @@ namespace Wechat.Api.Test
             [TestMethod]
             public void TestMq()
             {
+                ConcurrentDictionary<string, int> Dic = new ConcurrentDictionary<string, int>();
 
+                Dic.TryAdd("ff", 1);
+                Dic["ff"]++;
+                Dic["ff"] = 22;
+      
+                string testTopic = "testtopic123455ssss";
                 var producer1 = RocketMqHelper.CreateDefaultMQProducer("aaaaa");
-                var producer2 = RocketMqHelper.CreateDefaultMQProducer("aaaaa");
-                var producer3 = RocketMqHelper.CreateDefaultMQProducer("aaaaa");
-                producer3.send(new org.apache.rocketmq.common.message.Message("123456", Encoding.UTF8.GetBytes("张三dddd")));
-               
-                producer3.send(new org.apache.rocketmq.common.message.Message("123456", Encoding.UTF8.GetBytes("李四3333")));
-                producer3.send(new org.apache.rocketmq.common.message.Message("123456", Encoding.UTF8.GetBytes("张三dddd")));
-               
-                producer3.send(new org.apache.rocketmq.common.message.Message("123456", Encoding.UTF8.GetBytes("李四3333")));
-                var cusomer1 = RocketMqHelper.CreateDefaultMQPushConsumer<AAMessageListenerConcurrently>("ddd");
+                producer1.send(new org.apache.rocketmq.common.message.Message(testTopic, Encoding.UTF8.GetBytes("张三dddd")));
 
-                var cusomer2 = RocketMqHelper.CreateDefaultMQPushConsumer<AAMessageListenerConcurrently>("ddd");
-                var cusomer3 = RocketMqHelper.CreateDefaultMQPushConsumer<AAMessageListenerConcurrently>("ddd");
-                var cusomer4 = RocketMqHelper.CreateDefaultMQPushConsumer<AAMessageListenerConcurrently>("ddd");
-                cusomer1.subscribe("123456", "*");
+
+                var cusomer1 = RocketMqHelper.CreateDefaultMQPushConsumer<AAMessageListenerConcurrently>("ddd");
+                cusomer1.subscribe(testTopic, "*");
+
+
+
+
+
 
                 Thread.Sleep(1000000);
             }

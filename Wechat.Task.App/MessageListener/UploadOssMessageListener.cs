@@ -27,7 +27,7 @@ namespace Wechat.Task.App.MessageListener
                     var content = Encoding.UTF8.GetString(messageClientExt.getBody());
 
                     UploadFileObj uploadFileObj = content.ToObj<UploadFileObj>();
-
+         
                     string objName = null;
                     string mchId = RedisCache.CreateInstance().Get(ConstCacheKey.GetMchIdKey(uploadFileObj.WxId));
                     if (string.IsNullOrEmpty(mchId))
@@ -78,20 +78,7 @@ namespace Wechat.Task.App.MessageListener
                     return ConsumeConcurrentlyStatus.RECONSUME_LATER;
                 }
 
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         }
     }
